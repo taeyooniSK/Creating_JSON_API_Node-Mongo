@@ -7,14 +7,14 @@ const todoSchema = new mongoose.Schema({
         },
     completed:{
         type:Boolean,
-        default: false;
+        default: false
     },
     created_date: {
-        type: Data,
+        type: Date,
         default: Date.now
     }
 });
 
-const Todo = mognoose.model("Todo", todoShcema);
+const Todo = mongoose.model("Todo", todoSchema);
 
 module.exports = Todo;

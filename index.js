@@ -2,13 +2,29 @@ const express = require("express"),
       app = express(),
       port = process.env.PORT || 3000;
 
+const todoRoutes = require("./routes/todos");
+
 app.get("/", (req, res) => {
-    res.send("{data: 12812938712983}");// 만약 res.sned("문자열인 객체") 이렇게 보내면 data를 html로 인식함
-    // res.json({messageL : "Hi from js object~"}); // 이건 json으로 인식함 <- 이 방법을 더 선호. 왜냐하면 데이터로 json을 보낸단느게 명시적이기 때문
+    res.send("HELLO FROM THE ROOTE ROUTE!");
 });
+
+app.use("/api/todos", todoRoutes);
 
 app.listen(port, () => {
     console.log(`Server has started on ${port}`);
 })
+
+
+/*
+    Routes
+Verb    Route               Description
+GET     /api/todos          List all todos
+POST    /api/todos          Create new todo
+GET     /api/todo/:todoId   Retrieve a todo
+PUT     /api/todo/:todoId   Update a todo
+DELETE  /api/todo/:todoId   Delete a todo
+
+*/
+
 
 
