@@ -9,6 +9,7 @@
   "author": "Tae-yoon <yeotaeyoon@gmail.com>",
   "license": "MIT",
   "dependencies": {
+    "body-parser": "^1.18.3",
     "express": "^4.16.4",
     "mongoose": "^5.4.18"
   }

@@ -1,8 +1,13 @@
 const express = require("express"),
       app = express(),
-      port = process.env.PORT || 3000;
+      port = process.env.PORT || 3000,
+      bodyParser = require("body-parser"); // string인 데이터를 object로 바꿔주는 package
+
 
 const todoRoutes = require("./routes/todos");
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: true}));
 
 app.get("/", (req, res) => {
     res.send("HELLO FROM THE ROOTE ROUTE!");
