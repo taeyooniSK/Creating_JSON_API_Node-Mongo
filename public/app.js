@@ -1,23 +1,44 @@
 $(document).ready( () => {
     $.getJSON("/api/todos")
-    .then(addTodo)
-
-    // .then(todos => {
-    //     todos.map( todo => {
-    //         let li = document.createElement("li");
-    //         li.textContent = todo.name;
-    //         $('.list').append(li);
-    //     })
-    // })
+    .then(addTodos)
     .catch( err => {
         console.log(err);
     })
+
+    $("#todoInput").keypress( event => {
+        if (event.which == 13){
+            if($("#todoInput").val().length > 0 ){
+                console.log("you hit enter key");
+                createTodo();
+            } else {
+                alert("YOU SHOULD ETNER SOMETHING");
+            }
+        } 
+    });
+   
 })
 
 
-function addTodo(todos){
+function addTodos(todos){
     todos.forEach( todo => { 
-        let newTodo = $("<li class='task'>" + todo.name +"</li>")
-        $('.list').append(newTodo);
+       addTodo(todo);
     });
+}
+
+function addTodo(todo){
+    let newTodo = $("<li class='task'>" + todo.name +"</li>");
+        if(todo.completed){
+            newTodo.addClass("done");
+        }
+        $('.list').append(newTodo);
+}
+    
+function createTodo(){
+    let todoInputVal = {name: $("#todoInput").val()};
+    $("#todoInput").val("");
+    $.post("/api/todos", todoInputVal)
+    .then(addTodo)
+    .catch(err => {
+        console.log(err);
+    })
 }
