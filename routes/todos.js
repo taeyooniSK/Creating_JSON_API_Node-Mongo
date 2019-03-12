@@ -27,4 +27,16 @@ router.post("/", (req, res) => {
     // string인 데이터를 object로 바꿔주는 body-parser가 필요함
     // db.Todo.create()
 });
+
+router.get("/:todoId", (req, res) => {
+    db.Todo.findById(req.params.todoId)
+    .then(foundTodo => {
+        return res.json(foundTodo);
+    })
+    .catch(err => {
+        res.send(err);
+    })
+});
+
+
 module.exports = router;
