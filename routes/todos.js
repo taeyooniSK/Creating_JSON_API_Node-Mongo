@@ -38,5 +38,14 @@ router.get("/:todoId", (req, res) => {
     })
 });
 
+router.put("/:todoId", (req, res) => {
+    db.Todo.findOneAndUpdate({_id: req.params.todoId}, req.body, {new: true})    //db.Todo.findOneAndUpdate({_id: 내가 찾을 데이터의 아이디}, req.body(내가 업데이트 하고싶은 정보), {new: true}(return되는 데이터가 내가 새로 업데이트한 데이터라고 설정)}) 
+    .then( foundTodo => {
+        return res.json(foundTodo);
+    })
+    .catch( err => {
+        res.send(err);
+    })
+});
 
 module.exports = router;
