@@ -15,8 +15,13 @@ $(document).ready( () => {
             }
         } 
     });
+
+    $(".list").on("click", "span", function(){
+       deleteTodo($(this));
+    })
    
 })
+
 
 
 function addTodos(todos){
@@ -26,7 +31,8 @@ function addTodos(todos){
 }
 
 function addTodo(todo){
-    let newTodo = $("<li class='task'>" + todo.name +"</li>");
+    let newTodo = $("<li class='task'>" + todo.name + "<span>X</span></li>");
+    newTodo.data("id", todo._id);
         if(todo.completed){
             newTodo.addClass("done");
         }
@@ -41,4 +47,22 @@ function createTodo(){
     .catch(err => {
         console.log(err);
     })
+}
+
+function deleteTodo(clickedTodo){
+    let todoId = clickedTodo.parent().data("id");
+    const URL = `/api/todos/${todoId}`;
+
+    $.ajax({
+        method: "DELETE",
+        url: URL
+    })
+    .then(data => {
+        console.log(data);
+    })
+    .catch(err => {
+        console.log(err);
+    })
+    
+    clickedTodo.parent().remove();
 }
