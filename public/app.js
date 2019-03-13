@@ -25,8 +25,6 @@ $(document).ready( () => {
        deleteTodo($(this).parent());
     })
 
-    
-
 
 })
 
@@ -76,51 +74,26 @@ function deleteTodo(clickedTodo){
     clickedTodo.remove();
 }
 
-// function updateTodo(completedTodo){   //클래스에 의존해서 토글기능을 넣게되면 누군가가 클래스를 조작하여서 데이터베이스에 있는 정보와 view에서 보이는 것과 다를 수 있다.
-//         let clickedId = completedTodo.data("id"); // 그래서 처음 페이지가 로딩될때 li요소에 data()메소드를 이용해서 completed에 관한 정보를 미리 저장해놓는게 더 안전.
-//         let URL = `/api/todos/${clickedId}`;
-//         let data = {completed : true};
-
-//         if (!completedTodo.hasClass("done")){
-//             putTodo(URL, data);
-//             completedTodo.addClass("done");
-//         } else {
-//             data.completed = false;
-//             putTodo(URL, data);
-//             completedTodo.removeClass("done");
-//         }
-// }
-
-
-function updateTodo(todo){   //클래스에 의존해서 토글기능을 넣게되면 누군가가 클래스를 조작하여서 데이터베이스에 있는 정보와 view에서 보이는 것과 다를 수 있다.
-    let clickedId = todo.data("id"); // 그래서 처음 페이지가 로딩될때 li요소에 data()메소드를 이용해서 completed에 관한 정보를 미리 저장해놓는게 더 안전.
+function updateTodo(todo){   
+    let clickedId = todo.data("id"); 
     let URL = `/api/todos/${clickedId}`;
-    let isDone = todo.data("completed");
-    let updatedData = { completed : !isDone};
+    let isDone = !todo.data("completed"); // negation의 좋은 활용의 예
+    let updatedData = { completed : isDone};
     $.ajax({
         method: "PUT",
         url: URL,
         data: updatedData
     })
     .then( updatedTodo => {
-        
-        todo.data("completed", updatedTodo.completed);
         console.log(updatedTodo);
-        if(!(updatedTodo.completed)){
-            todo.removeClass("done");
-        } else {
-            todo.addClass("done");
-        }
+        todo.data("completed", isDone);
+        todo.toggleClass("done");
+    
     })
     .catch( err => {
         console.log(err);
     })
     
-    // if(!isDone){
-    //     todo.addClass("done");
-    // } else {
-    //     todo.removeClass("done");
-    // }
     
 }
 
