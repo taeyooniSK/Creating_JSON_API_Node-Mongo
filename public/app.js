@@ -16,10 +16,18 @@ $(document).ready( () => {
         } 
     });
 
-    $(".list").on("click", "span", function(){
-       deleteTodo($(this));
+    $(".list").on("click", "li", function(){
+        updateTodo($(this));
+    });
+
+    $(".list").on("click", "span", function(e){
+       e.stopPropagation(); // span을 클릭했을 때 이벤트 버블링으로 인해서 클릭된 요소부터 그 상위 요소로 이벤트가 전달됨 -> 즉 parent요소인 li에도 전달되어 밑의 alert함수가 호출됨. event bubbling을 막기위한 방법으로 event.stopPropagation();
+       deleteTodo($(this).parent());
     })
-   
+
+    
+
+
 })
 
 
@@ -50,8 +58,8 @@ function createTodo(){
 }
 
 function deleteTodo(clickedTodo){
-    let todoId = clickedTodo.parent().data("id");
-    const URL = `/api/todos/${todoId}`;
+    let clickedId = clickedTodo.data("id");
+    const URL = `/api/todos/${clickedId}`;
 
     $.ajax({
         method: "DELETE",
@@ -64,5 +72,34 @@ function deleteTodo(clickedTodo){
         console.log(err);
     })
     
-    clickedTodo.parent().remove();
+    clickedTodo.remove();
+}
+
+function updateTodo(completedTodo){
+        let clickedId = completedTodo.data("id");
+        let URL = `/api/todos/${clickedId}`;
+        let data = {completed : true};
+
+        if (!completedTodo.hasClass("done")){
+            putTodo(URL, data);
+            completedTodo.addClass("done");
+        } else {
+            data.completed = false;
+            putTodo(URL, data);
+            completedTodo.removeClass("done");
+        }
+}
+
+function putTodo(url, data){
+    $.ajax({
+        method: "PUT",
+        url: url,
+        data: data
+    })
+    .then( updatedTodo => {
+        console.log(updatedTodo);
+    })
+    .catch( err => {
+        console.log(err);
+    })
 }
